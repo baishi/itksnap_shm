@@ -15,7 +15,6 @@ class Vector3d(ctypes.Structure):
     _fields_ = [
         ('value', ctypes.c_double * 3)
     ]
-
 class CameraState(ctypes.Structure):
     _fields_ = [
         ('position', ctypes.c_double * 3),
@@ -24,7 +23,7 @@ class CameraState(ctypes.Structure):
         ('clipping_range', ctypes.c_double * 2),
         ('view_angle', ctypes.c_double),
         ('parallel_scale', ctypes.c_double),
-        ('parallel_projection', ctypes.c_int),
+        ('parallel_projection', ctypes.c_int32),
     ]
 
 class IPCMessage(ctypes.Structure):
@@ -71,7 +70,7 @@ def shmget(shm_key):
     #    raise TypeError('`key` must be `bytes` or `unicode`')
 
     _shmget = rtld.shmget
-    result = _shmget(ctypes.c_int32(shm_key), ctypes.c_int(0), ctypes.c_int(0))
+    result = _shmget(ctypes.c_int32(shm_key), ctypes.c_int32(0), ctypes.c_int32(0))
     if result == -1:
         raise RuntimeError('IPC endpoint %s not available' % (shm_key))
         #raise RuntimeError(os.strerror(ctypes.get_errno()))
@@ -80,7 +79,7 @@ def shmget(shm_key):
 def shmat(shm_id):
     _shmat = rtld.shmat
     _shmat.restype = ctypes.c_void_p
-    _shmat.argtypes = (ctypes.c_int, ctypes.c_void_p, ctypes.c_int)
+    _shmat.argtypes = (ctypes.c_int32, ctypes.c_void_p, ctypes.c_int32)
     none = None
     none_ptr = ctypes.cast(none, ctypes.POINTER(ctypes.c_voidp))
 
